@@ -30,6 +30,14 @@ class MailDelivery
             ];
         }
 
+        if ($mailer === 'resend' && ! filled(config('services.resend.key'))) {
+            return [
+                'delivered' => false,
+                'mailer' => $mailer,
+                'hint' => 'RESEND_API_KEY is missing in backend/.env.',
+            ];
+        }
+
         return [
             'delivered' => true,
             'mailer' => $mailer,

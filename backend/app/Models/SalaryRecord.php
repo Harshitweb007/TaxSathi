@@ -79,20 +79,30 @@ class SalaryRecord extends Model
             $finalSalary = 0.0;
         }
 
-        // Update or create the salary record
-        $record = self::updateOrCreate(
-            [
-                'employee_id' => $employeeId,
-                'month' => $month,
-                'year' => $year,
-            ],
-            [
+        // Update or create the salary record manually to avoid insertOrIgnore
+        $record = self::where('employee_id', $employeeId)
+            ->where('month', $month)
+            ->where('year', $year)
+            ->first();
+
+        if ($record) {
+            $record->update([
                 'absent_days' => $absentDays,
                 'overtime_hours' => $overtimeHours,
                 'final_salary' => $finalSalary,
                 'working_days' => $workingDays,
-            ]
-        );
+            ]);
+        } else {
+            $record = self::create([
+                'employee_id' => $employeeId,
+                'month' => $month,
+                'year' => $year,
+                'absent_days' => $absentDays,
+                'overtime_hours' => $overtimeHours,
+                'final_salary' => $finalSalary,
+                'working_days' => $workingDays,
+            ]);
+        }
 
         return $record;
     }

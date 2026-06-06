@@ -40,14 +40,15 @@ class AuthController extends Controller
         // Check for Super Admin credentials
         if ($email === env('ADMIN_USERNAME') && $password === env('ADMIN_PASSWORD')) {
             // Ensure the super admin exists in the DB so Sanctum has a tokenable model
-            $user = User::query()->firstOrCreate(
-                ['email' => $email],
-                [
+            $user = User::query()->where('email', $email)->first();
+            if (!$user) {
+                $user = User::query()->create([
+                    'email' => $email,
                     'name' => 'Super Admin',
                     'role' => 'super_admin',
                     'password' => Hash::make(\Illuminate\Support\Str::random(32)),
-                ]
-            );
+                ]);
+            }
 
             if ($user->role !== 'super_admin') {
                 $user->update(['role' => 'super_admin']);

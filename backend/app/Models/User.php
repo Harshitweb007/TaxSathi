@@ -67,7 +67,7 @@ class User extends Authenticatable
             \App\Models\Attendance::where('user_id', $user->id)->delete();
             \App\Models\SalaryRecord::where('user_id', $user->id)->delete();
             \App\Models\ContactMessage::where('user_id', $user->id)->delete();
-            $user->notifications()->delete();
+            \App\Models\Notification::where('user_id', $user->id)->delete();
         });
     }
 

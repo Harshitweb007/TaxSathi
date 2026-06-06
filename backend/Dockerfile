@@ -34,8 +34,7 @@ ENV MONGODB_DATABASE="dummy"
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Clear config and cache
-RUN php artisan config:clear && php artisan cache:clear
+
 
 # Set permissions for Laravel
 RUN chown -R www-data:www-data /app \

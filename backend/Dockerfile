@@ -27,6 +27,10 @@ WORKDIR /app
 # Copy application files
 COPY . .
 
+# Set dummy environment variables so Laravel artisan commands don't fail during Docker build
+ENV MONGODB_URI="mongodb://127.0.0.1:27017"
+ENV MONGODB_DATABASE="dummy"
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
